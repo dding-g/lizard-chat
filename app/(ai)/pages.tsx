@@ -1,13 +1,10 @@
-import { chatItemBuilder, getChats } from "./service/chat";
 import ChatContainer from "./ChatContainer";
+import { getChats } from "./service/chat.server";
 
 const AiPage = async () => {
   const docs = await getChats();
-  const chatItems = docs.map((v) => {
-    return chatItemBuilder(v.data().response);
-  });
-
-  return <ChatContainer items={chatItems} />;
+  const items = docs.map((v) => v.data().chat).filter(Boolean);
+  return <ChatContainer items={items} />;
 };
 
 export default AiPage;

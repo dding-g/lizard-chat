@@ -4,9 +4,15 @@ import { db } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 import { ChatItemData } from "@/(ai)/components/Chat.item";
+import { AUTH_COOKIE_NAME } from "@/constants/auth";
 
 export const POST = async (req: NextRequest, res: NextResponse) => {
-  const { id, text, responseUUID } = await req.json();
+  const { id, text } = await req.json();
+  const userId = req.cookies.get(AUTH_COOKIE_NAME)?.value;
+
+  if (!userId) {
+    return new Response("Unauthorized", { status: 401 });
+  }
 
   const body = {
     contents: [
@@ -23,7 +29,8 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
   };
 
   await addDoc(collection(db, "chat_history"), {
-    response: {
+    userId,
+    chat: {
       id,
       text,
       type: "sent",
@@ -51,15 +58,18 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
   const ret = await response.json();
 
   await addDoc(collection(db, "gemini_responses"), {
-    response: { ...ret, model: "gemini-1.5-flash" },
+    response: ret,
+    userId,
+    model: "gemini-1.5-flash",
     timestamp: new Date().toISOString(),
   });
 
   const textResponse = ret.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
 
   await addDoc(collection(db, "chat_history"), {
-    response: {
-      id: responseUUID,
+    userId,
+    chat: {
+      id,
       text: textResponse,
       type: "received",
     } as ChatItemData,

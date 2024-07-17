@@ -10,7 +10,7 @@ const ChatList = ({ items }: Props) => {
   return (
     <ul className="w-full p-0 pb-10 m-0 space-y-2">
       {items.map((v) => (
-        <li key={v.id} className="p-0 m-0">
+        <li key={`${v.id}_${v.type}`} className="p-0 m-0">
           <ChatItem {...v} />
         </li>
       ))}

@@ -1,50 +1,32 @@
+"use server";
+
+import { AUTH_COOKIE_NAME } from "@/constants/auth";
 import { db } from "@/lib/firebase";
-import { v4 as uuidv4 } from "uuid";
 import {
-  addDoc,
   collection,
   getDocs,
   limit,
   orderBy,
   query,
-  serverTimestamp,
   startAfter,
+  where,
 } from "@firebase/firestore";
-
-type Chat = {
-  id?: string;
-  text: string;
-  type: "sent" | "received";
-};
-export const chatItemBuilder = ({ id = uuidv4(), text, type }: Chat) => {
-  return {
-    id,
-    text,
-    type,
-  };
-};
-
-export const addChat = async (chat: Chat) => {
-  try {
-    await addDoc(collection(db, "chat_history"), {
-      response: chat,
-      timestamp: serverTimestamp(),
-    });
-  } catch (e) {
-    console.error("Error adding document: ", e);
-  }
-};
+import { cookies } from "next/headers";
 
 export const getChats = async (lastVisibleDoc = null) => {
+  const userId = cookies().get(AUTH_COOKIE_NAME)?.value;
+
   const q = lastVisibleDoc
     ? query(
         collection(db, "chat_history"),
+        where("userId", "==", userId),
         orderBy("timestamp", "asc"),
         startAfter(lastVisibleDoc),
         limit(100)
       )
     : query(
         collection(db, "chat_history"),
+        where("userId", "==", userId),
         orderBy("timestamp", "asc"),
         limit(100)
       );
