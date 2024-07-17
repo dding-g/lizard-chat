@@ -3,7 +3,9 @@ import ChatContainer from "./ChatContainer";
 
 const AiPage = async () => {
   const docs = await getChats();
-  const chatItems = docs.map((v) => chatItemBuilder(v.data().response));
+  const chatItems = docs.map((v) => {
+    return chatItemBuilder(v.data().response);
+  });
 
   return <ChatContainer items={chatItems} />;
 };

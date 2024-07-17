@@ -26,7 +26,7 @@ export const chatItemBuilder = ({ id = uuidv4(), text, type }: Chat) => {
 
 export const addChat = async (chat: Chat) => {
   try {
-    await addDoc(collection(db, "gemini_responses"), {
+    await addDoc(collection(db, "chat_history"), {
       response: chat,
       timestamp: serverTimestamp(),
     });
@@ -38,13 +38,13 @@ export const addChat = async (chat: Chat) => {
 export const getChats = async (lastVisibleDoc = null) => {
   const q = lastVisibleDoc
     ? query(
-        collection(db, "gemini_responses"),
+        collection(db, "chat_history"),
         orderBy("timestamp", "asc"),
         startAfter(lastVisibleDoc),
         limit(100)
       )
     : query(
-        collection(db, "gemini_responses"),
+        collection(db, "chat_history"),
         orderBy("timestamp", "asc"),
         limit(100)
       );

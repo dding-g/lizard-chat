@@ -4,17 +4,17 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import ChatIndicator from "./Chat.indicator";
 
-type Props = {
+export type ChatItemData = {
   id: string;
   text: string;
   type: "sent" | "received";
 };
 
-const ChatItem = ({ text, type }: Props) => {
+const ChatItem = ({ text, type }: ChatItemData) => {
   return (
     <div
       className={cn([
-        "space-y-1 w-full",
+        "space-y-1 w-full flex gap-2",
         {
           "flex-row-reverse": type === "sent",
           "flex-row": type === "received",
@@ -24,8 +24,8 @@ const ChatItem = ({ text, type }: Props) => {
       <Avatar>
         <AvatarImage
           src={match(type)
-            .with("received", () => "/avatar/lizard.jpeg")
-            .with("sent", () => "")
+            .with("received", () => "/avatar/lizard.jpg")
+            .with("sent", () => "/avatar/master.jpg")
             .otherwise(() => "")}
           alt=""
         />
@@ -36,10 +36,10 @@ const ChatItem = ({ text, type }: Props) => {
       ) : (
         <div
           className={cn([
-            "max-w-[80%] p-5 rounded-2xl bg-slate-50 text-black",
+            "max-w-[80%] px-5 py-4 rounded-2xl text-black",
             {
-              "rounded-r-xl rounded-bl-xl": type === "sent",
-              "rounded-l-xl rounded-br-xl": type === "received",
+              "rounded-r-xl rounded-bl-xl bg-slate-100": type === "sent",
+              "rounded-l-xl rounded-br-xl bg-green-100": type === "received",
             },
           ])}
         >

@@ -7,9 +7,8 @@ type Props = {
 };
 
 const ChatList = ({ items }: Props) => {
-  console.log({ items });
   return (
-    <ul className="w-full p-0 m-0 space-y-2">
+    <ul className="w-full p-0 pb-10 m-0 space-y-2">
       {items.map((v) => (
         <li key={v.id} className="p-0 m-0">
           <ChatItem {...v} />
