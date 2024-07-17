@@ -1,4 +1,4 @@
-import AiPage from "./ai/pages";
+import AiPage from "./(ai)/pages";
 
 export default function Home() {
   return (
