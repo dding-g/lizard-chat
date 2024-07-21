@@ -94,7 +94,7 @@ const ChatContainer = ({ items }: Props) => {
     <div>
       <ScrollArea
         viewportRef={ref}
-        className="w-full h-[600px] px-4 scroll-smooth"
+        className="w-full h-[60dvh] px-4 scroll-smooth"
       >
         <ChatList items={chatListData} />
       </ScrollArea>
