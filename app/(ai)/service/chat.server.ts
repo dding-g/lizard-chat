@@ -12,14 +12,9 @@ import {
   where,
 } from "@firebase/firestore";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export const getChats = async (lastVisibleDoc = null) => {
   const userId = cookies().get(AUTH_COOKIE_NAME)?.value;
-
-  if (!userId) {
-    redirect("/");
-  }
 
   const q = lastVisibleDoc
     ? query(

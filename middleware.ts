@@ -3,14 +3,22 @@ import { AUTH_COOKIE_NAME } from "./app/constants/auth";
 import { v4 } from "uuid";
 
 export function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+  const authCookie = request.cookies.get(AUTH_COOKIE_NAME)?.value;
 
-  response.cookies.set(AUTH_COOKIE_NAME, v4(), {
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-    maxAge: Infinity,
-  });
-
-  return response;
+  if (!authCookie) {
+    const res = NextResponse.redirect(request.url);
+    res.cookies.set(AUTH_COOKIE_NAME, v4(), {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: Infinity,
+    });
+    return res;
+  }
 }
+
+export const config = {
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|site.webmanifest).*)",
+  ],
+};
