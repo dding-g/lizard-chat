@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "🦎우리 개코 마뱀이랑 이야기 할 사람?",
 };
 
-const RootLayout = ({
+const RootLayout = async ({
   children,
 }: Readonly<{
   children: React.ReactNode;
